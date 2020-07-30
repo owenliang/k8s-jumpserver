@@ -1,0 +1,5 @@
+[Server]
+listen = "0.0.0.0:7000"
+
+[Record]
+path = "/data/jumpserver/records"
