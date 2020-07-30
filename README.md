@@ -2,7 +2,7 @@
 
 ## 架构
 
-![架构](https://raw.githubusercontent.com/owenliang/k8s-jumpserver/master/arch.jpeg)
+![架构](https://raw.githubusercontent.com/owenliang/k8s-jumpserver/master/arch.jpeg?a=1)
 
 ## 关键组件
 
