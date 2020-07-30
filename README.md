@@ -2,6 +2,7 @@
 
 ## 架构
 
+![架构](https://raw.githubusercontent.com/owenliang/k8s-jumpserver/master/arch.jpeg)
 
 ## 关键组件
 
@@ -58,6 +59,8 @@ func ValidateSSHToken(ctx context.Context, sshToken string) (tokenAuthData *Toke
 
 ssh_token由发布系统生成，用户携带ssh token前来登录，需要回调发布系统进行身份校验，关键信息索取。
 
+---
+
 bizes/k8s/stream.go：
 
 ```
@@ -70,7 +73,9 @@ func (handler *websocketProxy) onLogout() {
 }
 ```
 
-handler *websocketProxy中有相关数据。
+为了可以在发布系统中进行审计和录像回放，应将本次用户的ssh会话详细信息记入数据库，相关信息可以从handler对象中索取。
+
+这里可以选择回调发布平台进入存储，或者直接存入数据库。
 
 ## 生产部署
 
@@ -103,7 +108,7 @@ ExecStart=/path/to/jumpserver/jumpserver -jumpserver /path/to/jumpserver/jumpser
 WantedBy=multi-user.target
 ```
 
-通过发布平台的nginx转发：
+通过发布平台的nginx统一接入：
 
 ```
 map $http_upgrade $connection_upgrade {
@@ -119,4 +124,11 @@ server {
                 proxy_set_header Connection $connection_upgrade;
         }
 }
+```
+
+此时URL将变为：
+
+```
+/jumpserver/ssh?ssh_token=：长连接websocket
+/jumpserver/records/play?filename=：下载录像
 ```
