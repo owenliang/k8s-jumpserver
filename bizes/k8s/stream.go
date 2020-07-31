@@ -125,7 +125,7 @@ func (handler *websocketProxy) Next() (size *remotecommand.TerminalSize) {
 
 func (handler *websocketProxy) Read(buf []byte) (size int, err error) {
 	// 缓冲区仍有数据, 直接返回
-	if handler.transInput(buf) > 0 {
+	if size = handler.transInput(buf); size > 0 {
 		return
 	}
 
