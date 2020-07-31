@@ -40,7 +40,7 @@
         var ssh_token = document.getElementById("ssh_token").value
 
         // 连接websocket
-        ws = new WebSocket("ws://localhost:7000/ssh?ssh_token=" + encodeURIComponent(ssh_token));
+        ws = new WebSocket("ws://127.0.0.1:7000/ssh?ssh_token=" + encodeURIComponent(ssh_token));
         ws.onopen = function(event) {
             console.log("onopen")
 
@@ -54,8 +54,12 @@
             console.log("onclose")
         }
         ws.onmessage = function(event) {
-            // 服务端ssh输出, 写到web shell展示
-            term.write(event.data)
+            // 服务端ssh二进制输出, 解码utf-8写到web shell展示，非utf-8乱码展示
+            var reader = new FileReader();
+            reader.onload = function (event) {
+                term.write(reader.result);
+            }
+            reader.readAsText(event.data);
         }
         ws.onerror = function(event) {
             console.log("onerror")

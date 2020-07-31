@@ -156,7 +156,7 @@ func (handler *websocketProxy) Write(buf []byte) (size int, err error) {
 	copy(dupBuf, buf)
 
 	size = len(dupBuf)
-	if err = handler.wsConn.Write(websocket2.TextMessage, dupBuf); err != nil {
+	if err = handler.wsConn.Write(websocket2.BinaryMessage, dupBuf); err != nil {
 		handler.wsConn.Close()
 		return
 	}
